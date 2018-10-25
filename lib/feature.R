@@ -27,6 +27,13 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
     imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
     ### step 1. sample n_points from imgLR
     
+    for(n in 1:3){
+      featMat[n_files * n_points, 1, n] = imageData(imgHR)[2i-1, 2j-1, n]
+      featMat[n_files * n_points, 2, n] = imageData(imgHR)[2i, 2j-1, n]
+      featMat[n_files * n_points, 3, n] = imageData(imgHR)[2i-1, 2j, n]
+      featMat[n_files * n_points, 4, n] = imageData(imgHR)[2i, 2j, n]
+    }
+
     ### step 2. for each sampled point in imgLR,
     
         ### step 2.1. save (the neighbor 8 pixels - central pixel) in featMat
