@@ -30,8 +30,7 @@ addblack <- function(img) {
   return(imgblack)
 }
 
-##for(i in 1:n_files){
-  i = 1
+for(i in 1:n_files){
   imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   
@@ -48,7 +47,7 @@ addblack <- function(img) {
   col = ncol(imgLR) #total number of columns
   row = nrow(imgLR) #total number of rows
   
-  for (j in 1:1) ##length(samp_row)
+  for (j in 1:length(samp_row))
   {
     #find row and column indices for each of the 8 neighboring pixels:
     neighbors = rbind(
@@ -61,10 +60,10 @@ addblack <- function(img) {
       for (c in 1:3)
       {
         #Find the value of rth neighboring pixel at channel c
-        neighbor_value = imgLR.b[neighbors[r,1], neighbors[r,2], c][1]
+        neighbor_value = imgLR.b[neighbors[r,1]+1, neighbors[r,2]+1, c][1]
         
         #find the difference between this value and the center pixel:
-        featMat[i*j, r, c] = imgLR.b[samp_row[j],samp_col[j], c][1] - neighbor_value
+        featMat[i*j, r, c] = imgLR.b[samp_row[j]+1, samp_col[j]+1, c][1] - neighbor_value
       }
     }
     
@@ -80,7 +79,7 @@ addblack <- function(img) {
       labMat[i*j, 4, c] = imgHR[2*y, 2*x, c][1]
     }
   }
-  
+}
 ### step 3. repeat above for three channels
 
 
