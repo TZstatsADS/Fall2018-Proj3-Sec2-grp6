@@ -60,6 +60,10 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
         c(samp_row[j] - 1, samp_col[j] - 1), c(samp_row[j] - 1, samp_col[j]), c(samp_row[j] -1, samp_col[j] + 1),
         c(samp_row[j], samp_col[j] - 1), c(samp_row[j], samp_col[j] + 1),
         c(samp_row[j] + 1, samp_col[j] - 1), c(samp_row[j] + 1, samp_col[j]), c(samp_row[j] + 1, samp_col[j] + 1))
+      
+      y = samp_row[j]
+      x = samp_col[j]
+      
       for (r in 1:8)
       {
         for (c in 1:3)
@@ -71,13 +75,10 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
           featMat[i*j, r, c] = imgLR.b[samp_row[j],samp_col[j], c][1] - neighbor_value
         
           ### step 2.2. save the corresponding 4 sub-pixels of imgHR in labMat
-          y = samp_row[j]
-          x = samp_col[j]
-          
-          # labMat[i*j, 1, c] = imageData(imgHR)[2*y-1, 2*x-1, c]
-          # labMat[i*j, 2, c] = imageData(imgHR)[2*y, 2*x-1, c]
-          # labMat[i*j, 3, c] = imageData(imgHR)[2*y-1, 2*x, c]
-          # labMat[i*j, 4, c] = imageData(imgHR)[2*y, 2*x, c]
+          labMat[i*j, 1, c] = imgHR[2*y-1, 2*x-1, c][1]
+          labMat[i*j, 2, c] = imgHR[2*y, 2*x-1, c][1]
+          labMat[i*j, 3, c] = imgHR[2*y-1, 2*x, c][1]
+          labMat[i*j, 4, c] = imgHR[2*y, 2*x, c][1]
           
           }
       }
