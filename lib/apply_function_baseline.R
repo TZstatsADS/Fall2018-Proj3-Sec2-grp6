@@ -43,9 +43,6 @@ sample_point<-function(imgLR,npoints=1000){
 ###index data
 data_index<-sample_point(imgLR = imgLR)
 
-
-
-
 ###extract 8 point from the center
 extract_eight<-function(samp_row,samp_col){
   point1<-c(samp_row - 1, samp_col- 1)
@@ -99,7 +96,8 @@ addblack_img<-addblack(imgHR)
 ##extract value of 4 pixels
 value_img_HR<-function(row,col){
   value<-c()
-  value<- addblack_img[c(row)+1,c(col)+1,]
+  addblack_img_HR<-addblack(imgHR)
+  value<- addblack_img_HR[row+1,col+1,]
   return(value)
 }
 y1<-df_Subpixel$X1
@@ -135,7 +133,8 @@ n_files <- length(list.files(LR_dir))
 n_points = 1000
 ###
 
-
+imgLR<- readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
+imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
 
 ####function extract value of 8 pixels and 4 subpixels
 extract_value<-function(image_index){
@@ -150,6 +149,8 @@ extract_value<-function(image_index){
   #add black around the LR image
   addblack_img<-addblack(imgLR)
   #value of neighbor 8 pixels
+  x1<-df_neighbor$X1
+  x2<-df_neighbor$X2
   neighbor_value<-mapply(value_img_LR,x1,x2)
   #value of center pixel
   center_value<-mapply(value_img_LR,center_data1$samp_row,center_data1$samp_col)
@@ -172,7 +173,44 @@ extract_value<-function(image_index){
 }
 
 
+data_index<-sample_point(imgLR)
+
+###extract value from low resolution dataset
+extract_value_LR<-function(image_index){
+  imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", image_index), ".jpg"))
+  ###8 pixels
+  neighbor_list<-mapply(extract_eight,data_index$samp_row, data_index$samp_col)
+  df_neighbor <- data.frame(do.call(rbind,neighbor_list))
+  center_data1<-expandRows(data_index, "freq1")
+  #add black around the LR image
+  addblack_img<-addblack(imgLR)
+  #value of neighbor 8 pixels
+  x1<-df_neighbor$X1
+  x2<-df_neighbor$X2
+  neighbor_value<-mapply(value_img_LR,x1,x2)
+  #value of center pixel
+  center_value<-mapply(value_img_LR,center_data1$samp_row,center_data1$samp_col)
+  #subtract the value of center from the value of neighbor 8 pixels
+  value_LR<-neighbor_value-center_value
+  return(value_LR)
+}
 
 
 
-
+###extract value from high resolution dataset
+###4 subpixels
+extract_value_HR<-function(image_index){
+  imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", image_index), ".jpg")) 
+  Subpixel_list<-mapply(extract_four,data_index$samp_row, data_index$samp_col)
+  df_Subpixel <- data.frame(do.call(rbind,Subpixel_list))
+  center_data2<-expandRows(data_index, "freq2")
+  addblack_img<-addblack(imgHR)
+  y1<-df_Subpixel$X1
+  y2<-df_Subpixel$X2
+  subpixel_value<-mapply(value_img_LR,y1,y2)
+  ###value of center pixel
+  center_value<-mapply(value_img_LR,center_data2$samp_row,center_data2$samp_col)
+  #subtract the value of center from the value of neighbor 8 pixels
+  value_HR<-subpixel_value-center_value
+  return(value_HR)
+}
