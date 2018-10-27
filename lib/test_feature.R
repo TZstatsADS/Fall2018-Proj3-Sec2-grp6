@@ -30,7 +30,7 @@ addblack <- function(img) {
   return(imgblack)
 }
 
-for(i in 1:n_files){
+for(i in 1:1){ ##n_files
   imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   

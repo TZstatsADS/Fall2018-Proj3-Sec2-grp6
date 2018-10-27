@@ -13,11 +13,6 @@
   #}
 #}
 
-imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", i), ".jpg"))
-imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
-
-imgLR<- readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
-imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
 
 
 
