@@ -21,6 +21,15 @@ addblack <- function(img) {
   return(imgblack)
 }
 
+www <- function(x,c){
+  return(imgLR.b[,,c][c((samp_row[x]):(samp_row[x]+2)),c((samp_col[x]):(samp_col[x]+2))][-5])
+}
+
+nnn <- function(x,c){
+  return(
+    as.vector(imgHR@.Data[c(2*samp_row[x]-1,2*samp_row[x]),c(2*samp_col[x]-1,2*samp_col[x]),c])[c(3,1,2,4)]
+    )
+}
 
 feature <- function(LR_dir, HR_dir, n_points=1000){
   n_files <- length(list.files(LR_dir))
@@ -45,19 +54,17 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
     imgLR.b <- addblack(imgLR) 
     
     ### step 2. for each sampled point in imgLR,
-    for (j in 1:1000){
-      y = samp_row[j]
-      x = samp_col[j]
+
       for (c in c(1:3)){
         ### step 2.1. save (the neighbor 8 pixels - central pixel) in featMat
-        featMat[i*j, , c] <- imgLR.b[,,c][c(y,y+2),c(x,x+2)][-5]
+        featMat[((i-1)*1000+1):(i*1000), , c] <- t(sapply(c(1:1000), www,c=c))
         ### step 2.2. save the corresponding 4 sub-pixels of imgHR in labMat
-        labMat[i*j, , c] = as.vector(imgHR@.Data[c(2*y-1,2*y),c(2*x-1,2*x),c])[c(3,1,2,4)]
+        labMat[((i-1)*1000+1):(i*1000), , c] <- t(sapply(c(1:1000), nnn, c=c))
       }
         
     }
           
-  }
+  
   return(list(featMat=featMat,labMat=labMat))
 }
 
