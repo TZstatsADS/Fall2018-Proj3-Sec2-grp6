@@ -29,7 +29,7 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
   ### Input: a path for low-resolution images + a path for high-resolution images 
   ###        + number of points sampled from each LR image
   ### Output: an .RData file contains processed features and responses for the images
-
+  
   ### store feature and responses
   featMat <- array(NA, c(n_files * n_points, 8, 3))
   labMat <- array(NA, c(n_files * n_points, 4, 3))
@@ -45,14 +45,14 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
     imgLR.b <- addblack(imgLR) 
     
     ### step 2. for each sampled point in imgLR,
-    for (j in 1:length(samp_row)){
+    for (j in 1:1000){
       y = samp_row[j]
       x = samp_col[j]
       for (c in c(1:3)){
         ### step 2.1. save (the neighbor 8 pixels - central pixel) in featMat
-        featMat[i*j, , c] <- imgLR.b[,,c][c(samp_row[j],samp_row[j]+2),c(samp_col[j],samp_col[j]+2)][-5]
+        featMat[i*j, , c] <- imgLR.b[,,c][c(y,y+2),c(x,x+2)][-5]
         ### step 2.2. save the corresponding 4 sub-pixels of imgHR in labMat
-        labMat[i*j, , c] = as.vector(imgHR@.Data[c(y,y+1),c(x,x+1),c])[c(3,1,2,4)]
+        labMat[i*j, , c] = as.vector(imgHR@.Data[c(2*y-1,2*y),c(2*x-1,2*x),c])[c(3,1,2,4)]
       }
         
     }
@@ -62,6 +62,6 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
 }
 
     
-#feature()
+#feature(LR_dir, HR_dir, n_points=1000)
     
 
