@@ -5,7 +5,8 @@ date: "2018/10/28"
 output: html_document
 ---
 ```{r}
-
+library(splitstackshape)
+require(data.table)
 library(splitstackshape)
 train_dir <- "/Users/sherrybaby/Documents/Github/Fall2018-Proj3-Sec2-grp6/data/train_set/" # This will be modified for different data sets.
 LR_dir <- paste(train_dir, "LR/", sep="")
@@ -18,8 +19,8 @@ set.seed(2018)
 ###test data
 ```{r}
 
-imgLR<-readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
-imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
+#imgLR<-readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
+#imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
 ```
 
 
@@ -66,7 +67,7 @@ sample_point<-function(imgLR,npoints=1000){
 
 ```{r}
 ###index data
-data_index<-sample_point(imgLR)
+#data_index<-sample_point(imgLR)
 ```
 ###extract 8 point from the center function
 ```{r}
@@ -86,9 +87,9 @@ extract_eight<-function(samp_row,samp_col){
 ###index of neighbor 8 points
 ```{r}
 ##index of neighbor 8 points 
-neighbor_list<-mapply(extract_eight,data_index$samp_row, data_index$samp_col)
-require(data.table)
-df_neighbor <- data.frame(do.call(rbind,neighbor_list))
+#neighbor_list<-mapply(extract_eight,data_index$samp_row, data_index$samp_col)
+
+#df_neighbor <- data.frame(do.call(rbind,neighbor_list))
 ```
 
 ###extract value by index function
@@ -104,20 +105,20 @@ value_img_LR<-function(row,col){
 
 ###extract value from original image
 ```{r}
-library(splitstackshape)
+
 ###replicate the data of center point by freqency, frequecy 1=8, frequecy 2=4
-center_data1<-expandRows(data_index, "freq1")
-center_data2<-expandRows(data_index, "freq2")
+#center_data1<-expandRows(data_index, "freq1")
+#center_data2<-expandRows(data_index, "freq2")
 ###add black around the LR image
 #addblack_img<-addblack(imgLR)
 ###value of neighbor 8 pixels
-x1<-df_neighbor$X1
-x2<-df_neighbor$X2
-neighbor_value<-mapply(value_img_LR,x1,x2)
+#x1<-df_neighbor$X1
+#x2<-df_neighbor$X2
+#neighbor_value<-mapply(value_img_LR,x1,x2)
 ###value of center pixel
-center_value<-mapply(value_img_LR,center_data1$samp_row,center_data1$samp_col)
+#center_value<-mapply(value_img_LR,center_data1$samp_row,center_data1$samp_col)
 ##subtract the value of center from the value of neighbor 8 pixels
-value_LR<-neighbor_value-center_value
+#value_LR<-neighbor_value-center_value
 ```
 
 ###extract 4 pixels index from HR function
@@ -134,27 +135,27 @@ extract_four<-function(samp_row,samp_col){
 
 ###value of neighbor 4 sub-pixels
 ```{r}
-Subpixel_list<-mapply(extract_four,data_index$samp_row, data_index$samp_col)
-df_Subpixel <- data.frame(do.call(rbind,Subpixel_list))
-addblack_img<-addblack(imgHR)
-y1<-df_Subpixel$X1
-y2<-df_Subpixel$X2
+#Subpixel_list<-mapply(extract_four,data_index$samp_row, data_index$samp_col)
+#df_Subpixel <- data.frame(do.call(rbind,Subpixel_list))
+#addblack_img<-addblack(imgHR)
+#y1<-df_Subpixel$X1
+#y2<-df_Subpixel$X2
 ###subpixel value
-subpixel_value<-mapply(value_img_LR,y1,y2)
+#subpixel_value<-mapply(value_img_LR,y1,y2)
 ```
 
 ###value of center pixel
 ```{r}
 ###value of center pixel
-HR_row<-center_data2$samp_row
-HR_col<-center_data2$samp_col
-center_value<-mapply(value_img_LR,HR_row,HR_col)
+#HR_row<-center_data2$samp_row
+#HR_col<-center_data2$samp_col
+#center_value<-mapply(value_img_LR,HR_row,HR_col)
 ##subtract the value of center from the value of neighbor 8 pixels
-value_HR<-subpixel_value - center_value
+#value_HR<-subpixel_value - center_value
 ```
 
 
-###extract value from low resolution dataset
+###extract value from low resolution dataset function
 ```{r}
 ###extract value from low resolution dataset
 extract_value_LR<-function(image_index){
@@ -178,9 +179,9 @@ extract_value_LR<-function(image_index){
 }
 
 ```
-
+###extract value from high resolution dataset function
 ```{r}
-###extract value from high resolution dataset
+###extract value from high resolution dataset function
 ###4 subpixels
 extract_value_HR<-function(image_index){
   imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", image_index), ".jpg")) 
@@ -199,13 +200,13 @@ extract_value_HR<-function(image_index){
 }
 ```
 ```{r}
-imgLR4<-readImage("~/Desktop/5243project3/train_set/LR/img_0004.jpg")
-imgHR4<-readImage("~/Desktop/5243project3/train_set/HR/img_0004.jpg")
-addblack_img<-addblack(imgLR4)
-data_index<-sample_point(imgLR4)
-extract_value_LR(4,data_index)
-addblack_img<-addblack(imgHR4)
-extract_value_HR(4,data_index)
+#imgLR1<-readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
+#imgHR4<-readImage("~/Desktop/5243project3/train_set/HR/img_0004.jpg")
+#addblack_img<-addblack(imgLR4)
+#data_index<-sample_point(imgLR4)
+#extract_value_LR(4,data_index)
+#addblack_img<-addblack(imgHR4)
+#extract_value_HR(4,data_index)
 
 ```
 ```{r}
@@ -217,6 +218,26 @@ extract_value<-function(index){
   LR<-extract_value_LR(index)
   addblack_img<-addblack(imgHR)
   HR<-extract_value_HR(index)
-  return(list(LR,HR))
+  return(list(data_index,LR,HR))
+}
+mapply(extract_value,1:1500)
+```
+
+```{r}
+df_LR<-c()
+df_HR<-c()
+for (i in 1:1500){
+  imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", i), ".jpg"))
+  imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
+  addblack_img<-addblack(imgLR)
+  data_index<-sample_point(imgLR)
+  LR<-extract_value_LR(i)
+  LR<-t(LR)
+  df_LR<-rbind(LR,df_LR)
+  addblack_img<-addblack(imgHR)
+  HR<-extract_value_HR(i)
+  HR<-t(HR)
+  df_HR<-rbind(HR,df_HR)
 }
 ```
+
