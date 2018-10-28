@@ -21,8 +21,8 @@ set.seed(2018)
 ###test data
 ```{r}
 
-#imgLR<-readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
-#imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
+imgLR<-readImage("~/Desktop/5243project3/train_set/LR/img_0001.jpg")
+imgHR<-readImage("~/Desktop/5243project3/train_set/HR/img_0001.jpg")
 ```
 
 
@@ -222,23 +222,24 @@ extract_value_HR<-function(image_index){
 
 ```
 ```{r}
-extract_value<-function(index){
-  imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", index), ".jpg"))
-  imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", index), ".jpg"))
-  addblack_img<-addblack(imgLR)
-  data_index<-sample_point(imgLR)
-  LR<-extract_value_LR(index)
-  addblack_img<-addblack(imgHR)
-  HR<-extract_value_HR(index)
-  return(list(data_index,LR,HR))
-}
-mapply(extract_value,1:1500)
+#extract_value<-function(index){
+  #imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", index), ".jpg"))
+  #imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", index), ".jpg"))
+  #addblack_img<-addblack(imgLR)
+  #data_index<-sample_point(imgLR)
+  #LR<-extract_value_LR(index)
+  #addblack_img<-addblack(imgHR)
+  #center_HR<-extract_center(data_index)
+  #HR<-extract_value_HR(index)
+  #return(list(data_index,LR,HR))
+#}
+#a<-mapply(extract_value,1)
 ```
 
 ```{r}
 df_LR<-c()
 df_HR<-c()
-for (i in 1:2){
+for (i in 1:10){
   imgLR <- readImage(paste0(LR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   imgHR <- readImage(paste0(HR_dir,  "img_", sprintf("%04d", i), ".jpg"))
   addblack_img<-addblack(imgLR)
